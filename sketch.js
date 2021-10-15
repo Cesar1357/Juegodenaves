@@ -237,6 +237,8 @@ recarga.height = calentamiento;
     obstaclesGroup.setVelocityYEach(0);
     laserrsGroup.setVelocityYEach(0);
     laserrsGroup2.setVelocityYEach(0);
+    laserrsGroup2.setVelocityXEach(0);
+
 
 
     
