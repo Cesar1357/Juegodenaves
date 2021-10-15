@@ -4,8 +4,8 @@ var laserr;
 var nave, navei,nave2i;
 var ground, invisibleGround, groundImage;
 
-var laserrsGroup, laserrImage;
-var obstaclesGroup, obstacle1, obstacle2, obstacle3;
+var laserrsGroup,laserrsGroup2, laserrImage,asteroidsi;
+var obstaclesGroup, obstacle1, obstacle2, obstacle3, asteroids;
 
 var score=0;
 var hight=0;
@@ -14,6 +14,8 @@ var gameOver, restart;
 var nochei;
 var obsjetosgroup;
 var resetgroup;
+var enemigoGroup;
+var asteroidsGroup;
 var gameOverImg,restartImg;
 var edges;
 var laser;
@@ -28,7 +30,7 @@ function preload(){
   nochei = loadImage("noche.jpg");
   
   
-
+  asteroidsi = loadAnimation("meteorito4.png");
   navei = loadAnimation("nave.png");  
   nave2i = loadAnimation("nave2.png")
   laserrImage = loadImage("laser.png");
@@ -74,6 +76,7 @@ function setup() {
   obsjetosgroup = new Group();
   resetgroup = new Group();
   laserrsGroup2 = new Group();
+  asteroidsGroup = new Group();
 
 
   
@@ -123,6 +126,10 @@ function draw() {
   }
 //}
 
+if (keyDown("1")){
+    reset2();
+}
+
 
   calentamiento = calentamiento - 1;
 
@@ -169,6 +176,7 @@ recarga.height = calentamiento;
     spawnObstacles();
     spawnenemis();
     spawnlasersenemi();
+    spawnasteroids();
     
     
     
@@ -178,17 +186,35 @@ recarga.height = calentamiento;
 
     }
 
+    if(asteroidsGroup.isTouching(nave)){
+      gameState = 2;
+
+  }
+
     if(enemigoGroup.isTouching(nave)){
       gameState = 2;
 
   }
 
-    if(laserrsGroup.collide(obstaclesGroup)){
+  if(laserrsGroup.collide(obstaclesGroup)){
       score = score + 10;
       obstacle.lifetime = 1;
       laserr.lifetime = 1;
     
   }
+
+  if(laserrsGroup.collide(asteroidsGroup)){
+    score = score + 10;
+    asteroids.lifetime = 1;
+    laserr.lifetime = 1;
+  
+}
+
+  if(laserrsGroup.collide(laserrsGroup2)){
+    score = score + 1;
+    laserr.lifetime = 1;
+  
+}
 
   if(laserrsGroup2.collide(nave)){
     gameState = 2;
@@ -238,6 +264,7 @@ recarga.height = calentamiento;
     laserrsGroup.setVelocityYEach(0);
     laserrsGroup2.setVelocityYEach(0);
     laserrsGroup2.setVelocityXEach(0);
+    asteroidsGroup.setVelocityYEach(0);
 
 
 
@@ -246,6 +273,7 @@ recarga.height = calentamiento;
     obstaclesGroup.setLifetimeEach(-1);
     laserrsGroup.setLifetimeEach(-1);
     laserrsGroup2.setLifetimeEach(-1);
+    asteroidsGroup.setLifetimeEach(-1);
 
     
     if(mousePressedOver(restart)) {      
@@ -359,12 +387,6 @@ function spawnenemis(){
       
       enemigo.scale = 0.2;
       enemigoGroup.add(enemigo);
-  
-      
-      
-     
-    
-    
       
     
     }
@@ -372,6 +394,30 @@ function spawnenemis(){
   
     
   }
+
+
+  function spawnasteroids(){ 
+    if (frameCount % 10 === 0) {
+     
+        asteroids = createSprite(20,camera.y-500,10,40);
+        asteroids.x = Math.round(random(0,windowWidth));
+    
+        asteroids.velocityY = 10;
+        
+        
+  
+       
+        asteroids.addAnimation("asteroids",asteroidsi);
+  
+        
+        asteroids.lifetime = height;
+        
+        asteroids.scale = 0.2;
+        asteroidsGroup.add(asteroids);
+      
+      }
+      
+    }
   
   
 
@@ -386,12 +432,11 @@ function reset(){
   
   resetgroup.destroyEach();
   obsjetosgroup.destroyEach();
-
   enemigoGroup.destroyEach();
-
   obstaclesGroup.destroyEach();
   laserrsGroup.destroyEach();
   laserrsGroup2.destroyEach();
+  asteroidsGroup.destroyEach();
 
   
   score = 0;
@@ -405,6 +450,32 @@ function reset(){
     
 };
     
+
+function reset2(){
+  
+  
+  resetgroup.destroyEach();
+  obsjetosgroup.destroyEach();
+  enemigoGroup.destroyEach();
+  obstaclesGroup.destroyEach();
+  laserrsGroup.destroyEach();
+  laserrsGroup2.destroyEach();
+  asteroidsGroup.destroyEach();
+
+  enemigo = createSprite(-100,-20,20,20);
+ enemigo.lifetime = 100;
+ enemigo.velocityY = 2;
+
+    
+};
+    
+
+
+
+
+
+
+
 
 
 
